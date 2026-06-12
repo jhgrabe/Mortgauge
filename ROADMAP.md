@@ -10,7 +10,7 @@ roughly one session. The app always runs.
 - [x] **Slice 1 — Hello, full stack.** A trivial DRF endpoint
   (`GET /api/health/`) and a React page that fetches and displays it. Proves
   the whole pipe works before any real logic.
-- [ ] **Slice 2 — Monthly payment (P&I).** Form with loan amount, interest
+- [x] **Slice 2 — Monthly payment (P&I).** Form with loan amount, interest
   rate, term → DRF endpoint computes the monthly principal & interest payment.
   *First financial formula — learner attempts it first.*
 - [ ] **Slice 3 — PITI.** Add taxes, insurance (and optional HOA) inputs to

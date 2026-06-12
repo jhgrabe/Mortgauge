@@ -1,9 +1,16 @@
 # progress.md — living project state (Mortgauge)
 
 ## Where we are
-Slice 1 (hello, full stack) done and verified. Next up: slice 2.
+Slice 2 (monthly P&I) done and verified; merging via PR #1. Next up: slice 3.
 
 ## Done
+- 2026-06-12: Renamed app Homeward → Mortgauge (titles/docs only; folder
+  still `~/projects/homeward`). Remote added: github.com/jhgrabe/Mortgauge.
+  Workflow change: slices now merge via GitHub PRs.
+- 2026-06-12: Slice 2 — `finance.py` `monthly_payment()` (written by Josh:
+  amortization formula, Decimal, zero-rate branch), PaymentInputSerializer,
+  `POST /api/payment/`, React form. Money crosses the API as a string.
+  Verified: 300000/6.5/30 → 1896.20; 1000/0/7 → 11.90.
 - 2026-06-12: Slice 1 — `calculator` app, `GET /api/health/` (DRF
   `@api_view`), `config/urls.py` includes `calculator.urls` under `api/`.
   App.jsx replaced with minimal page that fetches `/api/health/` on load;
@@ -20,9 +27,8 @@ Slice 1 (hello, full stack) done and verified. Next up: slice 2.
 - 2026-06-12: Docs written: ROADMAP.md, ARCHITECTURE.md, README.md, this file.
 
 ## Next
-- Slice 2: monthly P&I payment — React form (loan amount, rate, term) →
-  POST endpoint computes payment. **Learner attempts the formula first**
-  (hints before answers).
+- Slice 3: PITI — add taxes, insurance, optional HOA inputs for the full
+  monthly payment. Mostly addition on top of slice 2.
 
 ## Key decisions
 - Dev proxy via Vite instead of django-cors-headers (fewer deps).

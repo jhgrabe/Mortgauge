@@ -54,7 +54,10 @@ You do the building. I read, understand, and learn. Specifically:
 ## Git
 
 - Commit after each working slice with a clear message.
-- Use a feature branch per slice and merge when it works. (This reinforces the Git workflow I'm learning in bootcamp.)
+- Use a feature branch per slice. Merge via a GitHub pull request, not a
+  local merge. (This reinforces the Git workflow I'm learning in bootcamp —
+  walk me through the PR steps; this area is still new to me.)
+- Remote: `origin` → github.com/jhgrabe/Mortgauge.
 
 ## Token discipline (I have a ~200K/day limit)
 
