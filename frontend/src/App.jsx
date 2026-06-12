@@ -14,7 +14,7 @@ function App() {
 
   return (
     <main>
-      <h1>Homeward</h1>
+      <h1>Mortgauge</h1>
       <p>Figure out what home you can actually afford.</p>
       <p className={`api-status ${apiStatus}`}>
         API: {apiStatus}

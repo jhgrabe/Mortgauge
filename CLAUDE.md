@@ -1,4 +1,4 @@
-# CLAUDE.md — Homeward (working name; rename freely)
+# CLAUDE.md — Mortgauge
 
 This file is the project rulebook. Read it in full at the start of every session, then read `progress.md` before doing anything else.
 

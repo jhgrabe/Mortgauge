@@ -1,4 +1,4 @@
-# Homeward
+# Mortgauge
 
 A web app that answers: **what home can I actually afford?**
 

@@ -1,4 +1,4 @@
-# ROADMAP — Homeward
+# ROADMAP — Mortgauge
 
 Vertical slices: each one is end-to-end (React → DRF → result), shippable in
 roughly one session. The app always runs.

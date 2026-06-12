@@ -1,4 +1,4 @@
-# progress.md — living project state
+# progress.md — living project state (Mortgauge)
 
 ## Where we are
 Slice 1 (hello, full stack) done and verified. Next up: slice 2.

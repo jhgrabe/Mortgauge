@@ -1,9 +1,9 @@
-# ARCHITECTURE — Homeward
+# ARCHITECTURE — Mortgauge
 
 ## Layout
 
 ```
-homeward/
+mortgauge/                   # repo root (folder currently named homeward/)
 ├── backend/
 │   ├── .venv/              # virtualenv (gitignored)
 │   ├── config/             # Django project: settings, root urls, wsgi/asgi
