@@ -9,15 +9,13 @@ def monthly_payment(principal, annual_rate, years):
     annual_rate: yearly interest rate as a percentage, e.g. Decimal('6.5')
     years: loan term in years, e.g. 30 (int)
 
-    YOUR TURN — hints:
-    1. Convert annual_rate (a percent!) to a monthly rate.
-    2. Convert years to a number of monthly payments.
-    3. Apply the fixed-rate mortgage payment formula.
-    4. annual_rate == 0 needs its own branch — try it in the formula
-       and see what breaks, then think about what the payment should
-       obviously be when no interest is charged.
-    5. Round to cents at the end: value.quantize(Decimal('0.01'))
-
-    Sanity check: 300000 at 6.5 for 30 years ≈ 1896.20
+    annual rate to monthly rate: divide by 100 to get a decimal, then divide by 12 to get monthly
+      years to months: multiply by 12
     """
-    raise NotImplementedError
+    if annual_rate == 0:
+        zero_interest = principal / (years * 12)
+        return zero_interest.quantize(Decimal('0.01'))
+    monthly_rate = annual_rate / Decimal('100') / Decimal('12')
+    num_payments = years * 12
+    payment = principal * (monthly_rate * (1 + monthly_rate) ** num_payments) / ((1 + monthly_rate) ** num_payments - 1)
+    return payment.quantize(Decimal('0.01'))

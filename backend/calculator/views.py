@@ -31,4 +31,6 @@ def payment(request):
             status=status.HTTP_501_NOT_IMPLEMENTED,
         )
 
-    return Response({'monthly_payment': monthly})
+    # JSON has no decimal type — send money as a string ("1896.20")
+    # so nothing downstream coerces it back into a float.
+    return Response({'monthly_payment': str(monthly)})
