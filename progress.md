@@ -25,10 +25,7 @@ architecture** before starting slice 1.
 - Calculations stateless (POST) until scenarios slice.
 
 ## Blockers / flags
-- ⚠️ User's home dir `/home/bubadoo` is an accidental git repo with ~22.6k
-  files staged incl. `.aws`/`.azure` creds (no commits yet). Recommended
-  `rm -rf /home/bubadoo/.git`. User decision — not done by us. Does not
-  affect homeward repo (nested repo takes precedence).
+- None. (Repo lives at `/home/bubadoo/projects/homeward`.)
 
 ## How to run
 - Backend: `cd backend && source .venv/bin/activate && python manage.py runserver`
