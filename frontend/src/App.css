@@ -4,6 +4,42 @@ main {
   padding: 0 1rem;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 320px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+
+input {
+  padding: 0.4rem;
+  font-size: 1rem;
+}
+
+button {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.result {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.error {
+  color: #c62828;
+}
+
 .api-status {
   font-size: 0.9rem;
   color: #888;
