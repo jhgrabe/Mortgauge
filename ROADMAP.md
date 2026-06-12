@@ -5,9 +5,9 @@ roughly one session. The app always runs.
 
 ## MVP — Affordability calculator
 
-- [ ] **Slice 0 — Skeleton & docs.** Repo hygiene, venv, Django + DRF, Vite +
-  React, dev proxy, docs. (this session)
-- [ ] **Slice 1 — Hello, full stack.** A trivial DRF endpoint
+- [x] **Slice 0 — Skeleton & docs.** Repo hygiene, venv, Django + DRF, Vite +
+  React, dev proxy, docs.
+- [x] **Slice 1 — Hello, full stack.** A trivial DRF endpoint
   (`GET /api/health/`) and a React page that fetches and displays it. Proves
   the whole pipe works before any real logic.
 - [ ] **Slice 2 — Monthly payment (P&I).** Form with loan amount, interest
@@ -25,7 +25,7 @@ roughly one session. The app always runs.
   scenario (inputs + results) to SQLite; list and reload them. *First data
   model + migration.*
 - [ ] **Slice 7 — Polish.** Input validation messages, sensible defaults,
-  layout cleanup. MVP done.
+  layout and UI design cleanup. MVP done.
 
 ## Later phases (placeholders — detail when we get there)
 

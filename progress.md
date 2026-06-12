@@ -1,10 +1,15 @@
 # progress.md — living project state
 
 ## Where we are
-Slice 0 (skeleton & docs) built, **awaiting user approval of roadmap +
-architecture** before starting slice 1.
+Slice 1 (hello, full stack) done and verified. Next up: slice 2.
 
 ## Done
+- 2026-06-12: Slice 1 — `calculator` app, `GET /api/health/` (DRF
+  `@api_view`), `config/urls.py` includes `calculator.urls` under `api/`.
+  App.jsx replaced with minimal page that fetches `/api/health/` on load;
+  Vite demo CSS/assets removed. Verified end-to-end through the dev proxy.
+- 2026-06-12: Rebuilt `backend/.venv` (old one broke when repo moved —
+  venvs aren't relocatable). `pip install -r requirements.txt` restored it.
 - 2026-06-12: Repo hygiene — .gitignore, git init (`main` branch) at
   homeward/ root, `.env.example`.
 - 2026-06-12: backend/ — venv at `backend/.venv`, Django 6.0.6 + DRF 3.17.1,
@@ -15,8 +20,9 @@ architecture** before starting slice 1.
 - 2026-06-12: Docs written: ROADMAP.md, ARCHITECTURE.md, README.md, this file.
 
 ## Next
-- Slice 1: `calculator` app, `GET /api/health/`, React fetches and displays
-  it. (Pending user OK; user may adjust roadmap/architecture first.)
+- Slice 2: monthly P&I payment — React form (loan amount, rate, term) →
+  POST endpoint computes payment. **Learner attempts the formula first**
+  (hints before answers).
 
 ## Key decisions
 - Dev proxy via Vite instead of django-cors-headers (fewer deps).
