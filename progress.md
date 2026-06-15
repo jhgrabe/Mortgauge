@@ -1,9 +1,14 @@
 # progress.md — living project state (Mortgauge)
 
 ## Where we are
-Slice 2 (monthly P&I) done and verified; merging via PR #1. Next up: slice 3.
+Slice 3 (PITI) done and verified; ready to commit and PR. Next up: slice 4.
 
 ## Done
+- 2026-06-15: Slice 3 — `piti()` in `finance.py` (taxes/12 + insurance/12 +
+  HOA + P&I), three optional fields on serializer (default 0), view returns
+  full breakdown as strings, React form updated with three new optional inputs.
+  Verified: 300000/6.5/30 + 4800/1200/100 → 2496.20; P&I-only still works;
+  zero-rate branch passes through piti(); validation errors unchanged.
 - 2026-06-12: Renamed app Homeward → Mortgauge (titles/docs only; folder
   still `~/projects/homeward`). Remote added: github.com/jhgrabe/Mortgauge.
   Workflow change: slices now merge via GitHub PRs.
@@ -27,8 +32,8 @@ Slice 2 (monthly P&I) done and verified; merging via PR #1. Next up: slice 3.
 - 2026-06-12: Docs written: ROADMAP.md, ARCHITECTURE.md, README.md, this file.
 
 ## Next
-- Slice 3: PITI — add taxes, insurance, optional HOA inputs for the full
-  monthly payment. Mostly addition on top of slice 2.
+- Slice 4: affordability — user enters income and monthly debts; app returns
+  max home price and DTI ratio based on the 28/36 rule.
 
 ## Key decisions
 - Dev proxy via Vite instead of django-cors-headers (fewer deps).

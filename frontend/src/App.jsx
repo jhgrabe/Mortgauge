@@ -6,7 +6,10 @@ function App() {
   const [apiStatus, setApiStatus] = useState('checking')
 
   // Form fields stay as strings; the backend parses and validates them.
-  const [form, setForm] = useState({ principal: '', annualRate: '', years: '' })
+  const [form, setForm] = useState({
+    principal: '', annualRate: '', years: '',
+    annualTaxes: '', annualInsurance: '', monthlyHoa: '',
+  })
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
 
@@ -34,12 +37,15 @@ function App() {
         principal: form.principal,
         annual_rate: form.annualRate,
         years: form.years,
+        annual_taxes: form.annualTaxes || '0',
+        annual_insurance: form.annualInsurance || '0',
+        monthly_hoa: form.monthlyHoa || '0',
       }),
     })
     const data = await response.json()
 
     if (response.ok) {
-      setResult(data.monthly_payment)
+      setResult(data)
     } else {
       // DRF returns either {detail: "..."} or {field: ["msg", ...]}
       setError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data))
@@ -84,10 +90,48 @@ function App() {
             required
           />
         </label>
+        <label>
+          Annual property taxes ($, optional)
+          <input
+            name="annualTaxes"
+            type="number"
+            step="0.01"
+            value={form.annualTaxes}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Annual homeowners insurance ($, optional)
+          <input
+            name="annualInsurance"
+            type="number"
+            step="0.01"
+            value={form.annualInsurance}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Monthly HOA ($, optional)
+          <input
+            name="monthlyHoa"
+            type="number"
+            step="0.01"
+            value={form.monthlyHoa}
+            onChange={handleChange}
+          />
+        </label>
         <button type="submit">Calculate payment</button>
       </form>
 
-      {result && <p className="result">Monthly payment (P&amp;I): ${result}</p>}
+      {result && (
+        <div className="result">
+          <p>Principal &amp; interest: ${result.principal_and_interest}</p>
+          <p>Taxes (monthly): ${result.taxes}</p>
+          <p>Insurance (monthly): ${result.insurance}</p>
+          <p>HOA: ${result.hoa}</p>
+          <p><strong>Total monthly (PITI): ${result.total}</strong></p>
+        </div>
+      )}
       {error && <p className="error">{error}</p>}
 
       <p className={`api-status ${apiStatus}`}>

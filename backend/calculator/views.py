@@ -19,18 +19,14 @@ def payment(request):
     serializer.is_valid(raise_exception=True)
     inputs = serializer.validated_data
 
-    try:
-        monthly = finance.monthly_payment(
-            principal=inputs['principal'],
-            annual_rate=inputs['annual_rate'],
-            years=inputs['years'],
-        )
-    except NotImplementedError:
-        return Response(
-            {'detail': 'monthly_payment() is not written yet — see calculator/finance.py'},
-            status=status.HTTP_501_NOT_IMPLEMENTED,
-        )
+    breakdown = finance.piti(
+        principal=inputs['principal'],
+        annual_rate=inputs['annual_rate'],
+        years=inputs['years'],
+        annual_taxes=inputs['annual_taxes'],
+        annual_insurance=inputs['annual_insurance'],
+        monthly_hoa=inputs['monthly_hoa'],
+    )
 
-    # JSON has no decimal type — send money as a string ("1896.20")
-    # so nothing downstream coerces it back into a float.
-    return Response({'monthly_payment': str(monthly)})
+    # Send every money value as a string to avoid float coercion.
+    return Response({k: str(v) for k, v in breakdown.items()})

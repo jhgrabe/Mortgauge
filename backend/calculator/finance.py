@@ -19,3 +19,25 @@ def monthly_payment(principal, annual_rate, years):
     num_payments = years * 12
     payment = principal * (monthly_rate * (1 + monthly_rate) ** num_payments) / ((1 + monthly_rate) ** num_payments - 1)
     return payment.quantize(Decimal('0.01'))
+
+
+def piti(principal, annual_rate, years,
+         annual_taxes=Decimal('0'), annual_insurance=Decimal('0'),
+         monthly_hoa=Decimal('0')):
+    """Return a breakdown of the full monthly housing payment (PITI).
+
+    Taxes and insurance are billed annually but paid monthly via escrow,
+    so each is divided by 12. HOA is already a monthly figure.
+    """
+    pi = monthly_payment(principal, annual_rate, years)
+    monthly_taxes = (annual_taxes / 12).quantize(Decimal('0.01'))
+    monthly_insurance = (annual_insurance / 12).quantize(Decimal('0.01'))
+    monthly_hoa = monthly_hoa.quantize(Decimal('0.01'))
+    total = pi + monthly_taxes + monthly_insurance + monthly_hoa
+    return {
+        'principal_and_interest': pi,
+        'taxes': monthly_taxes,
+        'insurance': monthly_insurance,
+        'hoa': monthly_hoa,
+        'total': total.quantize(Decimal('0.01')),
+    }
