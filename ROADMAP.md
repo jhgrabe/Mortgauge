@@ -23,7 +23,7 @@ roughly one session. The app always runs.
 - [x] **Slice 6 — Save scenarios.** First real model: persist a named
   scenario's inputs to SQLite; list and reload them. *First data model +
   migration.*
-- [ ] **Slice 7 — Polish.** Input validation messages, sensible defaults,
+- [x] **Slice 7 — Polish.** Input validation messages, sensible defaults,
   layout and UI design cleanup. MVP done.
 
 ## Later phases (placeholders — detail when we get there)

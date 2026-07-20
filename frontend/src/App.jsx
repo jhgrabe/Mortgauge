@@ -1,32 +1,55 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
+// DRF sends errors as either {detail: "..."} (one message) or
+// {field_name: ["message", ...]} (per-field). Flatten either shape into
+// a list of readable "field: message" strings for display.
+function parseErrors(data) {
+  if (typeof data.detail === 'string') return [data.detail]
+  return Object.entries(data).flatMap(([field, messages]) =>
+    messages.map((message) => `${field.replaceAll('_', ' ')}: ${message}`)
+  )
+}
+
+function ErrorList({ errors }) {
+  if (!errors) return null
+  return (
+    <ul className="error">
+      {errors.map((message) => <li key={message}>{message}</li>)}
+    </ul>
+  )
+}
+
 function App() {
   // 'checking' until the request finishes, then 'ok' or 'unreachable'
   const [apiStatus, setApiStatus] = useState('checking')
 
   // Form fields stay as strings; the backend parses and validates them.
+  // 30-year terms are the common case, so it's pre-filled instead of blank.
   const [form, setForm] = useState({
-    principal: '', annualRate: '', years: '',
+    principal: '', annualRate: '', years: '30',
     annualTaxes: '', annualInsurance: '', monthlyHoa: '',
   })
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
 
   // Affordability form has its own state — separate calculation, separate result.
   const [affordForm, setAffordForm] = useState({
     annualIncome: '', monthlyDebts: '', downPayment: '',
-    annualRate: '', years: '',
+    annualRate: '', years: '30',
     annualTaxes: '', annualInsurance: '', monthlyHoa: '',
   })
   const [affordResult, setAffordResult] = useState(null)
   const [affordError, setAffordError] = useState(null)
+  const [affordSubmitting, setAffordSubmitting] = useState(false)
   const [showSchedule, setShowSchedule] = useState(false)
 
   // Saved scenarios: the list, plus the name typed in before saving one.
   const [scenarios, setScenarios] = useState([])
   const [scenarioName, setScenarioName] = useState('')
   const [saveError, setSaveError] = useState(null)
+  const [saving, setSaving] = useState(false)
 
   function loadScenarios() {
     fetch('/api/scenarios/')
@@ -53,6 +76,7 @@ function App() {
     event.preventDefault()
     setResult(null)
     setError(null)
+    setSubmitting(true)
 
     const response = await fetch('/api/payment/', {
       method: 'POST',
@@ -67,12 +91,12 @@ function App() {
       }),
     })
     const data = await response.json()
+    setSubmitting(false)
 
     if (response.ok) {
       setResult(data)
     } else {
-      // DRF returns either {detail: "..."} or {field: ["msg", ...]}
-      setError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data))
+      setError(parseErrors(data))
     }
   }
 
@@ -85,6 +109,7 @@ function App() {
     event.preventDefault()
     setAffordResult(null)
     setAffordError(null)
+    setAffordSubmitting(true)
 
     const response = await fetch('/api/affordability/', {
       method: 'POST',
@@ -101,18 +126,20 @@ function App() {
       }),
     })
     const data = await response.json()
+    setAffordSubmitting(false)
 
     if (response.ok) {
       setAffordResult(data)
       setShowSchedule(false)
     } else {
-      setAffordError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data))
+      setAffordError(parseErrors(data))
     }
   }
 
   async function handleSaveScenario(event) {
     event.preventDefault()
     setSaveError(null)
+    setSaving(true)
 
     const response = await fetch('/api/scenarios/', {
       method: 'POST',
@@ -130,12 +157,13 @@ function App() {
       }),
     })
     const data = await response.json()
+    setSaving(false)
 
     if (response.ok) {
       setScenarioName('')
       loadScenarios()
     } else {
-      setSaveError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data))
+      setSaveError(parseErrors(data))
     }
   }
 
@@ -155,11 +183,14 @@ function App() {
 
   return (
     <main>
+      <span className={`api-status ${apiStatus}`}>API: {apiStatus}</span>
+
       <h1>Mortgauge</h1>
       <p>Figure out what home you can actually afford.</p>
 
+      <section className="card">
       <h2>What can I afford?</h2>
-      <form onSubmit={handleAffordSubmit}>
+      <form className="calc-form" onSubmit={handleAffordSubmit}>
         <label>
           Gross annual income ($)
           <input
@@ -242,8 +273,11 @@ function App() {
             onChange={handleAffordChange}
           />
         </label>
-        <button type="submit">Calculate affordability</button>
+        <button type="submit" disabled={affordSubmitting}>
+          {affordSubmitting ? 'Calculating…' : 'Calculate affordability'}
+        </button>
       </form>
+      <ErrorList errors={affordError} />
 
       {affordResult && (
         <div className="result">
@@ -296,12 +330,11 @@ function App() {
                 required
               />
             </label>
-            <button type="submit">Save</button>
+            <button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save'}</button>
           </form>
-          {saveError && <p className="error">{saveError}</p>}
+          <ErrorList errors={saveError} />
         </div>
       )}
-      {affordError && <p className="error">{affordError}</p>}
 
       {scenarios.length > 0 && (
         <div className="scenarios">
@@ -318,11 +351,11 @@ function App() {
           </ul>
         </div>
       )}
+      </section>
 
-      <hr />
-
+      <section className="card">
       <h2>Monthly payment</h2>
-      <form onSubmit={handleSubmit}>
+      <form className="calc-form" onSubmit={handleSubmit}>
         <label>
           Loan amount ($)
           <input
@@ -385,8 +418,11 @@ function App() {
             onChange={handleChange}
           />
         </label>
-        <button type="submit">Calculate payment</button>
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Calculating…' : 'Calculate payment'}
+        </button>
       </form>
+      <ErrorList errors={error} />
 
       {result && (
         <div className="result">
@@ -397,11 +433,7 @@ function App() {
           <p><strong>Total monthly (PITI): ${result.total}</strong></p>
         </div>
       )}
-      {error && <p className="error">{error}</p>}
-
-      <p className={`api-status ${apiStatus}`}>
-        API: {apiStatus}
-      </p>
+      </section>
     </main>
   )
 }

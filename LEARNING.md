@@ -95,3 +95,26 @@ words where possible. Appended to as we go; not read at session start.
   database. Loading a scenario re-runs `finance.affordability()` on those
   inputs rather than reading stored numbers, so results can never drift
   out of sync with the formula that produces them.
+
+## Slice 7 (2026-07-20) — MVP done
+
+- **DRF error shapes, flattened.** A validation failure comes back as
+  either `{detail: "..."}` (one message, e.g. a bad HTTP method) or
+  `{field_name: ["message", ...]}` (one array per invalid field). One
+  small function turns either shape into a flat list of "field: message"
+  strings so the UI never has to special-case which one it got.
+  `Object.entries(...).flatMap(...)` — `flatMap` because each field can
+  have more than one error message, and the result should still be one
+  flat list, not a list of lists.
+- **`<ErrorList errors={...} />`.** The first small reusable component in
+  the app — everywhere an error list needs to render is the same three
+  lines, and it skips rendering an empty `<ul>` when there's nothing wrong.
+- **`disabled` during a fetch.** Without it, clicking a slow submit button
+  twice fires two overlapping requests. A `submitting` boolean set true
+  right before the fetch and false right after (in both the success and
+  error paths) closes that gap.
+- **CSS Grid for form layout, not Flexbox.** `grid-template-columns:
+  repeat(auto-fit, minmax(200px, 1fr))` lets fields wrap into as many
+  columns as fit the container, no media query needed for the common
+  case — Flexbox can wrap too, but grid keeps every row's columns
+  aligned to the same widths.
