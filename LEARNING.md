@@ -47,3 +47,19 @@ words where possible. Appended to as we go; not read at session start.
   into main" plus a diff and comments. It tracks the *branch*, so pushes
   keep flowing into it until merge. And merging happens on GitHub's copy:
   local main is stale until `git pull`.
+
+## Slice 4 (2026-07-20)
+
+- **The 28/36 rule.** Lenders cap housing payment (PITI) at 28% of gross
+  monthly income (front-end ratio), and total debt payments — housing plus
+  car loans, credit cards, etc. — at 36% (back-end ratio). Whichever cap
+  is tighter wins: `max_piti = min(28% of income, 36% of income − existing
+  debts)`.
+- **Working backwards through a formula.** Slice 2's payment formula goes
+  loan amount → monthly payment. Affordability needs the inverse: a target
+  payment → the loan amount it supports. Same equation, algebraically
+  solved for principal instead of payment. Max home price is then just
+  that loan amount plus the down payment.
+- **Two independent forms, one page.** The affordability form has its own
+  `useState` pair (form + result), separate from the payment form's. No
+  shared state needed since the calculations don't depend on each other.

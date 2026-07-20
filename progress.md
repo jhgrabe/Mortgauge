@@ -1,11 +1,24 @@
 # progress.md — living project state (Mortgauge)
 
 ## Where we are
-Slice 3 (PITI) done, verified, and merged to main. Starting slice 4.
-Working agreement changed 2026-07-20: Josh no longer writes code by hand —
-Claude does all implementation; explanations still happen before/after.
+Slice 4 (affordability) done and verified; on branch `slice-4-affordability`,
+ready for PR. Working agreement changed 2026-07-20: Josh no longer writes
+code by hand — Claude does all implementation; explanations still happen
+before/after.
 
 ## Done
+- 2026-07-20: Slice 4 — `max_loan_amount()` (inverse of the amortization
+  formula) and `affordability()` in `finance.py` (28/36 rule: max PITI is
+  the lesser of 28% of gross income or 36% minus existing debts; subtract
+  taxes/insurance/HOA for max P&I, invert to max loan, add down payment for
+  max home price). `AffordabilityInputSerializer`, `POST /api/affordability/`,
+  second form + result block in React (separate state from the payment form).
+  Verified: 96000/400/40000/6.5/30 + 4800/1200 → max price 315286.83, DTI 33%
+  (front-end ratio binds); 50000 income/no debts/no down payment → DTI 28%
+  (matches 28% cap exactly, back-end ratio not binding). Confirmed via curl
+  against Django directly and through the Vite proxy. Browser screenshot
+  verification wasn't possible — this container is missing Chromium's
+  system libs (libnspr4 etc.) and has no root to install them.
 - 2026-07-20: Doc cleanup — ROADMAP slice 3 checked off, this file corrected
   (slice 3 was already committed straight to main as e8b7efb, not via PR),
   stray blank-line diff in README.md reverted, CLAUDE.md working agreement
@@ -38,8 +51,8 @@ Claude does all implementation; explanations still happen before/after.
 - 2026-06-12: Docs written: ROADMAP.md, ARCHITECTURE.md, README.md, this file.
 
 ## Next
-- Slice 4: affordability — user enters income and monthly debts; app returns
-  max home price and DTI ratio based on the 28/36 rule.
+- Slice 5: amortization schedule — month-by-month principal/interest/balance
+  table.
 
 ## Key decisions
 - Dev proxy via Vite instead of django-cors-headers (fewer deps).
