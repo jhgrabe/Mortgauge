@@ -1,12 +1,22 @@
 # progress.md — living project state (Mortgauge)
 
 ## Where we are
-Slice 4 (affordability) done and verified; on branch `slice-4-affordability`,
-ready for PR. Working agreement changed 2026-07-20: Josh no longer writes
-code by hand — Claude does all implementation; explanations still happen
-before/after.
+Slice 5 (amortization schedule) done and verified; on branch
+`slice-5-amortization`, ready for PR. Working agreement changed 2026-07-20:
+Josh no longer writes code by hand — Claude does all implementation;
+explanations still happen before/after.
 
 ## Done
+- 2026-07-20: Slice 5 — `amortization_schedule()` in `finance.py` (per
+  month: interest on current balance, principal = payment minus interest,
+  balance carried forward; final month pays off the exact remaining
+  balance to absorb rounding drift). Folded into `affordability()`'s
+  response as a `schedule` list, scheduled against the max loan amount.
+  React: collapsible table under the affordability result. Verified: 360
+  rows for a 300000/6.5%/30yr loan, principal column sums to exactly
+  300000.00, balance hits exactly 0.00 at month 360; zero-rate loan also
+  checked (12 equal-principal months). Confirmed via curl against the live
+  endpoint.
 - 2026-07-20: Slice 4 — `max_loan_amount()` (inverse of the amortization
   formula) and `affordability()` in `finance.py` (28/36 rule: max PITI is
   the lesser of 28% of gross income or 36% minus existing debts; subtract
@@ -51,8 +61,8 @@ before/after.
 - 2026-06-12: Docs written: ROADMAP.md, ARCHITECTURE.md, README.md, this file.
 
 ## Next
-- Slice 5: amortization schedule — month-by-month principal/interest/balance
-  table.
+- Slice 6: save scenarios — first real model (Scenario), persist inputs +
+  results to SQLite, list and reload them.
 
 ## Key decisions
 - Dev proxy via Vite instead of django-cors-headers (fewer deps).

@@ -50,4 +50,9 @@ def affordability(request):
         monthly_hoa=inputs['monthly_hoa'],
     )
 
-    return Response({k: str(v) for k, v in result.items()})
+    # Every Decimal crosses the API as a string, including inside the schedule rows.
+    schedule = [{k: str(v) for k, v in row.items()} for row in result.pop('schedule')]
+    return Response({
+        **{k: str(v) for k, v in result.items()},
+        'schedule': schedule,
+    })

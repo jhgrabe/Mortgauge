@@ -36,6 +36,32 @@ button {
   color: #2e7d32;
 }
 
+.schedule-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+}
+
+table.schedule {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #333;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.schedule th,
+table.schedule td {
+  padding: 0.25rem 0.6rem;
+  text-align: right;
+  border-bottom: 1px solid #eee;
+}
+
+table.schedule th:first-child,
+table.schedule td:first-child {
+  text-align: left;
+}
+
 .error {
   color: #c62828;
 }

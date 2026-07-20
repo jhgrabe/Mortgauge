@@ -21,6 +21,7 @@ function App() {
   })
   const [affordResult, setAffordResult] = useState(null)
   const [affordError, setAffordError] = useState(null)
+  const [showSchedule, setShowSchedule] = useState(false)
 
   useEffect(() => {
     fetch('/api/health/')
@@ -89,6 +90,7 @@ function App() {
 
     if (response.ok) {
       setAffordResult(data)
+      setShowSchedule(false)
     } else {
       setAffordError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data))
     }
@@ -192,6 +194,40 @@ function App() {
           <p>Max loan amount: ${affordResult.max_loan_amount}</p>
           <p>Max monthly payment (PITI): ${affordResult.max_monthly_piti}</p>
           <p>Debt-to-income ratio: {affordResult.dti_ratio}%</p>
+
+          {affordResult.schedule.length > 0 && (
+            <>
+              <button type="button" onClick={() => setShowSchedule(!showSchedule)}>
+                {showSchedule ? 'Hide' : 'Show'} amortization schedule
+              </button>
+              {showSchedule && (
+                <div className="schedule-wrapper">
+                  <table className="schedule">
+                    <thead>
+                      <tr>
+                        <th>Month</th>
+                        <th>Payment</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Balance</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {affordResult.schedule.map((row) => (
+                        <tr key={row.month}>
+                          <td>{row.month}</td>
+                          <td>${row.payment}</td>
+                          <td>${row.principal}</td>
+                          <td>${row.interest}</td>
+                          <td>${row.balance}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
       {affordError && <p className="error">{affordError}</p>}
