@@ -1,12 +1,24 @@
 # progress.md — living project state (Mortgauge)
 
 ## Where we are
-Slice 6 (save scenarios) done and verified; on branch `slice-6-scenarios`,
-ready for PR. Working agreement changed 2026-07-20: Josh no longer writes
+Slice 7 (polish) done and verified; on branch `slice-7-polish`, ready for
+PR. **MVP is functionally complete after this merges** — all 7 roadmap
+slices done. Working agreement changed 2026-07-20: Josh no longer writes
 code by hand — Claude does all implementation; explanations still happen
 before/after.
 
 ## Done
+- 2026-07-20: Slice 7 (MVP done) — validation errors now render as a
+  readable per-field list (`parseErrors()` + `<ErrorList>`) instead of raw
+  JSON; both calculator forms default `years` to 30; submit buttons
+  disable and show "Calculating…"/"Saving…" while a request is in flight
+  (was possible to double-submit before); layout redesign — CSS custom
+  properties, card-style sections, forms laid out as a responsive CSS
+  grid instead of one long column, API status moved to a small badge in
+  the corner. No backend changes. Verified: `vite build` and `eslint`
+  clean, `manage.py check` clean, and confirmed via curl that a
+  multi-field validation error (missing income + out-of-range rate) comes
+  back in the `{field: [messages]}` shape `parseErrors()` expects.
 - 2026-07-20: Slice 6 — first real model. `Scenario` (inputs only, no
   stored results — field names match the affordability form/API exactly),
   migration `0001_initial`, `ScenarioSerializer` (ModelSerializer),
@@ -72,8 +84,9 @@ before/after.
 - 2026-06-12: Docs written: ROADMAP.md, ARCHITECTURE.md, README.md, this file.
 
 ## Next
-- Slice 7: polish — input validation messages, sensible defaults, layout
-  and UI design cleanup. Last slice before MVP is done.
+- MVP is done. Next up is Phase 2 (deal analyzer — candidate properties,
+  ranked by ROI/$-per-sqft/monthly cost) per ROADMAP.md, whenever Josh
+  wants to start it. No immediate blockers.
 
 ## Key decisions
 - Dev proxy via Vite instead of django-cors-headers (fewer deps).
