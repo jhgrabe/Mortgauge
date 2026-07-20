@@ -13,6 +13,15 @@ function App() {
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
 
+  // Affordability form has its own state — separate calculation, separate result.
+  const [affordForm, setAffordForm] = useState({
+    annualIncome: '', monthlyDebts: '', downPayment: '',
+    annualRate: '', years: '',
+    annualTaxes: '', annualInsurance: '', monthlyHoa: '',
+  })
+  const [affordResult, setAffordResult] = useState(null)
+  const [affordError, setAffordError] = useState(null)
+
   useEffect(() => {
     fetch('/api/health/')
       .then((response) => response.json())
@@ -52,11 +61,144 @@ function App() {
     }
   }
 
+  function handleAffordChange(event) {
+    const { name, value } = event.target
+    setAffordForm({ ...affordForm, [name]: value })
+  }
+
+  async function handleAffordSubmit(event) {
+    event.preventDefault()
+    setAffordResult(null)
+    setAffordError(null)
+
+    const response = await fetch('/api/affordability/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        annual_income: affordForm.annualIncome,
+        monthly_debts: affordForm.monthlyDebts || '0',
+        down_payment: affordForm.downPayment || '0',
+        annual_rate: affordForm.annualRate,
+        years: affordForm.years,
+        annual_taxes: affordForm.annualTaxes || '0',
+        annual_insurance: affordForm.annualInsurance || '0',
+        monthly_hoa: affordForm.monthlyHoa || '0',
+      }),
+    })
+    const data = await response.json()
+
+    if (response.ok) {
+      setAffordResult(data)
+    } else {
+      setAffordError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data))
+    }
+  }
+
   return (
     <main>
       <h1>Mortgauge</h1>
       <p>Figure out what home you can actually afford.</p>
 
+      <h2>What can I afford?</h2>
+      <form onSubmit={handleAffordSubmit}>
+        <label>
+          Gross annual income ($)
+          <input
+            name="annualIncome"
+            type="number"
+            step="0.01"
+            value={affordForm.annualIncome}
+            onChange={handleAffordChange}
+            required
+          />
+        </label>
+        <label>
+          Monthly debt payments ($, optional)
+          <input
+            name="monthlyDebts"
+            type="number"
+            step="0.01"
+            value={affordForm.monthlyDebts}
+            onChange={handleAffordChange}
+          />
+        </label>
+        <label>
+          Down payment ($, optional)
+          <input
+            name="downPayment"
+            type="number"
+            step="0.01"
+            value={affordForm.downPayment}
+            onChange={handleAffordChange}
+          />
+        </label>
+        <label>
+          Interest rate (% per year)
+          <input
+            name="annualRate"
+            type="number"
+            step="0.001"
+            value={affordForm.annualRate}
+            onChange={handleAffordChange}
+            required
+          />
+        </label>
+        <label>
+          Term (years)
+          <input
+            name="years"
+            type="number"
+            value={affordForm.years}
+            onChange={handleAffordChange}
+            required
+          />
+        </label>
+        <label>
+          Annual property taxes ($, optional)
+          <input
+            name="annualTaxes"
+            type="number"
+            step="0.01"
+            value={affordForm.annualTaxes}
+            onChange={handleAffordChange}
+          />
+        </label>
+        <label>
+          Annual homeowners insurance ($, optional)
+          <input
+            name="annualInsurance"
+            type="number"
+            step="0.01"
+            value={affordForm.annualInsurance}
+            onChange={handleAffordChange}
+          />
+        </label>
+        <label>
+          Monthly HOA ($, optional)
+          <input
+            name="monthlyHoa"
+            type="number"
+            step="0.01"
+            value={affordForm.monthlyHoa}
+            onChange={handleAffordChange}
+          />
+        </label>
+        <button type="submit">Calculate affordability</button>
+      </form>
+
+      {affordResult && (
+        <div className="result">
+          <p><strong>Max home price: ${affordResult.max_home_price}</strong></p>
+          <p>Max loan amount: ${affordResult.max_loan_amount}</p>
+          <p>Max monthly payment (PITI): ${affordResult.max_monthly_piti}</p>
+          <p>Debt-to-income ratio: {affordResult.dti_ratio}%</p>
+        </div>
+      )}
+      {affordError && <p className="error">{affordError}</p>}
+
+      <hr />
+
+      <h2>Monthly payment</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Loan amount ($)

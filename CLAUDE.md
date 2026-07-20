@@ -22,15 +22,14 @@ Do not pull live real-estate listing data. Major sites have no beginner-friendly
 
 ## How we work together (the working agreement)
 
-You do the building. I read, understand, and learn. Specifically:
+You do the building, including all code — as of 2026-07-20 I'm no longer typing code myself. I read, understand, and learn. Specifically:
 
 1. **Explain before you code.** In plain language, say what we're about to do and *why*, before writing it.
-2. **Walk me through after.** After writing code, briefly explain what each part does and why.
-3. **Hints before answers on core logic.** For the parts that are the actual learning (the financial formulas, the data model, the API design), give me a hint and let me attempt it first. Only show the full solution if I'm stuck or ask.
-4. **One task at a time.** Do one slice, then stop and wait for me. Don't run ahead.
-5. **No walls of text.** Short, direct responses. Don't paste whole files back at me unless I ask.
-6. **Readable code is non-negotiable.** Clear names, conventional structure, comments only where something isn't obvious. I have to be able to read everything you write.
-7. **Correct with hints, not lectures.** If I get something wrong, nudge me toward the fix.
+2. **Walk me through after.** After writing code, briefly explain what each part does and why — including the financial formulas, the data model, and the API design, since that's still the learning even though I'm not typing it.
+3. **One task at a time.** Do one slice, then stop and wait for me. Don't run ahead.
+4. **No walls of text.** Short, direct responses. Don't paste whole files back at me unless I ask.
+5. **Readable code is non-negotiable.** Clear names, conventional structure, comments only where something isn't obvious. I have to be able to read everything you write.
+6. **Correct with hints, not lectures.** If I got something wrong or want a different approach, nudge me toward the fix rather than a lecture.
 
 ## The documents (what each file is for)
 
