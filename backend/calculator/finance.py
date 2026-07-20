@@ -39,6 +39,44 @@ def max_loan_amount(monthly_pi_payment, annual_rate, years):
     return principal.quantize(Decimal('0.01'))
 
 
+def amortization_schedule(principal, annual_rate, years):
+    """Return the month-by-month breakdown of a loan: for each month, the
+    payment split into principal vs. interest, and the balance remaining.
+
+    Each month's interest is the rate applied to the *current* balance, so
+    interest shrinks and principal grows over the life of the loan even
+    though the payment itself stays flat.
+    """
+    if principal <= 0:
+        return []
+
+    payment = monthly_payment(principal, annual_rate, years)
+    monthly_rate = annual_rate / Decimal('100') / Decimal('12')
+    balance = principal
+    schedule = []
+
+    for month in range(1, years * 12 + 1):
+        interest = (balance * monthly_rate).quantize(Decimal('0.01'))
+        principal_paid = payment - interest
+        # Last payment: pay off whatever balance remains exactly, so
+        # rounding across hundreds of months can't leave a stray cent.
+        if month == years * 12 or principal_paid > balance:
+            principal_paid = balance
+            payment_this_month = principal_paid + interest
+        else:
+            payment_this_month = payment
+        balance -= principal_paid
+        schedule.append({
+            'month': month,
+            'payment': payment_this_month.quantize(Decimal('0.01')),
+            'principal': principal_paid.quantize(Decimal('0.01')),
+            'interest': interest,
+            'balance': balance.quantize(Decimal('0.01')),
+        })
+
+    return schedule
+
+
 def affordability(annual_income, monthly_debts, down_payment, annual_rate, years,
                    annual_taxes=Decimal('0'), annual_insurance=Decimal('0'),
                    monthly_hoa=Decimal('0')):
@@ -67,6 +105,7 @@ def affordability(annual_income, monthly_debts, down_payment, annual_rate, years
         'max_loan_amount': max_loan.quantize(Decimal('0.01')),
         'max_monthly_piti': max_piti.quantize(Decimal('0.01')),
         'dti_ratio': dti.quantize(Decimal('0.01')),
+        'schedule': amortization_schedule(max_loan, annual_rate, years),
     }
 
 

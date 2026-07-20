@@ -63,3 +63,13 @@ words where possible. Appended to as we go; not read at session start.
 - **Two independent forms, one page.** The affordability form has its own
   `useState` pair (form + result), separate from the payment form's. No
   shared state needed since the calculations don't depend on each other.
+
+- **Amortization: each month's interest is on the *current* balance**, not
+  the original loan — so as the balance shrinks, less of the flat payment
+  goes to interest and more goes to principal, even though the payment
+  itself never changes.
+- **Rounding drift over hundreds of months.** Rounding each month's
+  interest to the cent means the last payment's math won't land on exactly
+  $0.00 balance by coincidence — so the final month is a special case:
+  pay off whatever balance is actually left, rather than trusting the
+  formula's payment amount.

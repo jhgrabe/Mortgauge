@@ -18,7 +18,7 @@ roughly one session. The app always runs.
 - [ ] **Slice 4 — Max affordable price.** Add income, monthly debts, down
   payment. Compute DTI and work *backwards* from the max allowed payment to
   the max home price.
-- [ ] **Slice 5 — Amortization schedule.** Month-by-month breakdown of
+- [x] **Slice 5 — Amortization schedule.** Month-by-month breakdown of
   principal vs. interest vs. balance, displayed as a table.
 - [ ] **Slice 6 — Save scenarios.** First real model: persist a named
   scenario (inputs + results) to SQLite; list and reload them. *First data

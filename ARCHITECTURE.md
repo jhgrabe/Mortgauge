@@ -40,7 +40,7 @@ All endpoints under `/api/`. Calculator endpoints are **POST** and stateless
 | --------------------- | -------- | ---------------------------------------- |
 | `/api/health/`        | GET      | proves the stack works (slice 1)         |
 | `/api/payment/`       | POST     | PITI breakdown for a given loan (slices 2–3) |
-| `/api/affordability/` | POST     | max home price, max loan, DTI via 28/36 rule (slice 4); amortization schedule joins in slice 5 |
+| `/api/affordability/` | POST     | max home price, max loan, DTI via 28/36 rule, plus amortization schedule for the max loan (slices 4–5) |
 | `/api/scenarios/`     | GET/POST | saved scenarios (slice 6)                |
 
 **Why POST for a calculation:** the input set is too big for query strings,
