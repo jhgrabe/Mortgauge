@@ -20,9 +20,9 @@ roughly one session. The app always runs.
   the max home price.
 - [x] **Slice 5 — Amortization schedule.** Month-by-month breakdown of
   principal vs. interest vs. balance, displayed as a table.
-- [ ] **Slice 6 — Save scenarios.** First real model: persist a named
-  scenario (inputs + results) to SQLite; list and reload them. *First data
-  model + migration.*
+- [x] **Slice 6 — Save scenarios.** First real model: persist a named
+  scenario's inputs to SQLite; list and reload them. *First data model +
+  migration.*
 - [ ] **Slice 7 — Polish.** Input validation messages, sensible defaults,
   layout and UI design cleanup. MVP done.
 

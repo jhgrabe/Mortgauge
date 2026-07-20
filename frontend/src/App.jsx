@@ -23,11 +23,25 @@ function App() {
   const [affordError, setAffordError] = useState(null)
   const [showSchedule, setShowSchedule] = useState(false)
 
+  // Saved scenarios: the list, plus the name typed in before saving one.
+  const [scenarios, setScenarios] = useState([])
+  const [scenarioName, setScenarioName] = useState('')
+  const [saveError, setSaveError] = useState(null)
+
+  function loadScenarios() {
+    fetch('/api/scenarios/')
+      .then((response) => response.json())
+      .then((data) => setScenarios(data))
+      .catch(() => {})
+  }
+
   useEffect(() => {
     fetch('/api/health/')
       .then((response) => response.json())
       .then((data) => setApiStatus(data.status))
       .catch(() => setApiStatus('unreachable'))
+
+    loadScenarios()
   }, [])
 
   function handleChange(event) {
@@ -94,6 +108,49 @@ function App() {
     } else {
       setAffordError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data))
     }
+  }
+
+  async function handleSaveScenario(event) {
+    event.preventDefault()
+    setSaveError(null)
+
+    const response = await fetch('/api/scenarios/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: scenarioName,
+        annual_income: affordForm.annualIncome,
+        monthly_debts: affordForm.monthlyDebts || '0',
+        down_payment: affordForm.downPayment || '0',
+        annual_rate: affordForm.annualRate,
+        years: affordForm.years,
+        annual_taxes: affordForm.annualTaxes || '0',
+        annual_insurance: affordForm.annualInsurance || '0',
+        monthly_hoa: affordForm.monthlyHoa || '0',
+      }),
+    })
+    const data = await response.json()
+
+    if (response.ok) {
+      setScenarioName('')
+      loadScenarios()
+    } else {
+      setSaveError(typeof data.detail === 'string' ? data.detail : JSON.stringify(data))
+    }
+  }
+
+  function handleLoadScenario(scenario) {
+    setAffordForm({
+      annualIncome: scenario.annual_income,
+      monthlyDebts: scenario.monthly_debts,
+      downPayment: scenario.down_payment,
+      annualRate: scenario.annual_rate,
+      years: scenario.years,
+      annualTaxes: scenario.annual_taxes,
+      annualInsurance: scenario.annual_insurance,
+      monthlyHoa: scenario.monthly_hoa,
+    })
+    setAffordResult(null)
   }
 
   return (
@@ -228,9 +285,39 @@ function App() {
               )}
             </>
           )}
+
+          <form className="save-scenario" onSubmit={handleSaveScenario}>
+            <label>
+              Save this scenario as
+              <input
+                type="text"
+                value={scenarioName}
+                onChange={(event) => setScenarioName(event.target.value)}
+                required
+              />
+            </label>
+            <button type="submit">Save</button>
+          </form>
+          {saveError && <p className="error">{saveError}</p>}
         </div>
       )}
       {affordError && <p className="error">{affordError}</p>}
+
+      {scenarios.length > 0 && (
+        <div className="scenarios">
+          <h3>Saved scenarios</h3>
+          <ul>
+            {scenarios.map((scenario) => (
+              <li key={scenario.id}>
+                {scenario.name}
+                <button type="button" onClick={() => handleLoadScenario(scenario)}>
+                  Load
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <hr />
 

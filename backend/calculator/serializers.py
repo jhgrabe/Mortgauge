@@ -2,6 +2,8 @@ from decimal import Decimal
 
 from rest_framework import serializers
 
+from .models import Scenario
+
 
 class PaymentInputSerializer(serializers.Serializer):
     """Validates the inputs for the monthly payment calculation.
@@ -29,6 +31,22 @@ class PaymentInputSerializer(serializers.Serializer):
         max_digits=8, decimal_places=2, min_value=Decimal('0'),
         required=False, default=Decimal('0'),
     )
+
+
+class ScenarioSerializer(serializers.ModelSerializer):
+    """Saves and lists Scenarios. Field-level validation (max_digits,
+    decimal_places) comes straight from the model, so it can't drift out
+    of sync with the database.
+    """
+    class Meta:
+        model = Scenario
+        fields = [
+            'id', 'name', 'created_at',
+            'annual_income', 'monthly_debts', 'down_payment',
+            'annual_rate', 'years',
+            'annual_taxes', 'annual_insurance', 'monthly_hoa',
+        ]
+        read_only_fields = ['id', 'created_at']
 
 
 class AffordabilityInputSerializer(serializers.Serializer):
