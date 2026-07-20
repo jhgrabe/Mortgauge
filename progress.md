@@ -1,9 +1,15 @@
 # progress.md — living project state (Mortgauge)
 
 ## Where we are
-Slice 3 (PITI) done and verified; ready to commit and PR. Next up: slice 4.
+Slice 3 (PITI) done, verified, and merged to main. Starting slice 4.
+Working agreement changed 2026-07-20: Josh no longer writes code by hand —
+Claude does all implementation; explanations still happen before/after.
 
 ## Done
+- 2026-07-20: Doc cleanup — ROADMAP slice 3 checked off, this file corrected
+  (slice 3 was already committed straight to main as e8b7efb, not via PR),
+  stray blank-line diff in README.md reverted, CLAUDE.md working agreement
+  updated for Josh no longer coding manually.
 - 2026-06-15: Slice 3 — `piti()` in `finance.py` (taxes/12 + insurance/12 +
   HOA + P&I), three optional fields on serializer (default 0), view returns
   full breakdown as strings, React form updated with three new optional inputs.

@@ -13,12 +13,11 @@ roughly one session. The app always runs.
 - [x] **Slice 2 — Monthly payment (P&I).** Form with loan amount, interest
   rate, term → DRF endpoint computes the monthly principal & interest payment.
   *First financial formula — learner attempts it first.*
-- [ ] **Slice 3 — PITI.** Add taxes, insurance (and optional HOA) inputs to
+- [x] **Slice 3 — PITI.** Add taxes, insurance (and optional HOA) inputs to
   get the full monthly payment. Mostly addition; cements the vocabulary.
 - [ ] **Slice 4 — Max affordable price.** Add income, monthly debts, down
   payment. Compute DTI and work *backwards* from the max allowed payment to
-  the max home price. *The core algorithm of the app — learner attempts
-  first.*
+  the max home price.
 - [ ] **Slice 5 — Amortization schedule.** Month-by-month breakdown of
   principal vs. interest vs. balance, displayed as a table.
 - [ ] **Slice 6 — Save scenarios.** First real model: persist a named
