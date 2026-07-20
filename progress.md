@@ -1,12 +1,23 @@
 # progress.md — living project state (Mortgauge)
 
 ## Where we are
-Slice 5 (amortization schedule) done and verified; on branch
-`slice-5-amortization`, ready for PR. Working agreement changed 2026-07-20:
-Josh no longer writes code by hand — Claude does all implementation;
-explanations still happen before/after.
+Slice 6 (save scenarios) done and verified; on branch `slice-6-scenarios`,
+ready for PR. Working agreement changed 2026-07-20: Josh no longer writes
+code by hand — Claude does all implementation; explanations still happen
+before/after.
 
 ## Done
+- 2026-07-20: Slice 6 — first real model. `Scenario` (inputs only, no
+  stored results — field names match the affordability form/API exactly),
+  migration `0001_initial`, `ScenarioSerializer` (ModelSerializer),
+  `ScenarioListCreate` (DRF generic `ListCreateAPIView`, first non-
+  `@api_view` view), `GET/POST /api/scenarios/`, registered in admin.
+  React: save-this-scenario form under the affordability result, saved-
+  scenarios list with a Load button that refills the affordability form
+  (doesn't auto-recalculate). Verified via curl against the live endpoint
+  with the real SQLite db: create → list (newest first) → validation
+  error on missing required field, all correct. `db.sqlite3` is
+  gitignored so test data doesn't leak into commits.
 - 2026-07-20: Slice 5 — `amortization_schedule()` in `finance.py` (per
   month: interest on current balance, principal = payment minus interest,
   balance carried forward; final month pays off the exact remaining
@@ -61,8 +72,8 @@ explanations still happen before/after.
 - 2026-06-12: Docs written: ROADMAP.md, ARCHITECTURE.md, README.md, this file.
 
 ## Next
-- Slice 6: save scenarios — first real model (Scenario), persist inputs +
-  results to SQLite, list and reload them.
+- Slice 7: polish — input validation messages, sensible defaults, layout
+  and UI design cleanup. Last slice before MVP is done.
 
 ## Key decisions
 - Dev proxy via Vite instead of django-cors-headers (fewer deps).

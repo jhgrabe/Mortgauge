@@ -41,31 +41,36 @@ All endpoints under `/api/`. Calculator endpoints are **POST** and stateless
 | `/api/health/`        | GET      | proves the stack works (slice 1)         |
 | `/api/payment/`       | POST     | PITI breakdown for a given loan (slices 2–3) |
 | `/api/affordability/` | POST     | max home price, max loan, DTI via 28/36 rule, plus amortization schedule for the max loan (slices 4–5) |
-| `/api/scenarios/`     | GET/POST | saved scenarios (slice 6)                |
+| `/api/scenarios/`     | GET/POST | list/save named scenarios (slice 6)      |
 
 **Why POST for a calculation:** the input set is too big for query strings,
 and DRF serializers validate the request body for free.
 
-## Data model (nothing persisted until slice 6)
+## Data model
 
 ```
 Scenario
 ├── name              CharField
 ├── created_at        DateTimeField (auto)
 ├── annual_income     DecimalField
-├── monthly_debts     DecimalField
-├── down_payment      DecimalField
-├── interest_rate     DecimalField   # annual %, e.g. 6.500
-├── term_years        IntegerField
-├── monthly_taxes     DecimalField
-└── monthly_insurance DecimalField
+├── monthly_debts     DecimalField    # default 0
+├── down_payment      DecimalField    # default 0
+├── annual_rate       DecimalField    # annual %, e.g. 6.500
+├── years             IntegerField
+├── annual_taxes      DecimalField    # default 0
+├── annual_insurance  DecimalField    # default 0
+└── monthly_hoa       DecimalField    # default 0
 ```
 
+Field names match the affordability form/API exactly, so a saved scenario
+round-trips through the same serializer shape used everywhere else.
+
 **Why DecimalField, not FloatField:** money. Floats accumulate rounding
-errors; Decimal is exact. The Python math will use `decimal.Decimal` too.
+errors; Decimal is exact. The Python math uses `decimal.Decimal` too.
 
 **Why results aren't stored:** they're derivable from inputs. Storing them
-invites stale data if a formula improves.
+invites stale data if a formula improves — loading a scenario recomputes
+`finance.affordability()` fresh.
 
 **Phase 3 readiness:** Scenario gets a nullable `user` ForeignKey later —
 one migration, no rewrite. Phase 2 adds a `Property` model for comparisons.

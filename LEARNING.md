@@ -73,3 +73,25 @@ words where possible. Appended to as we go; not read at session start.
   $0.00 balance by coincidence — so the final month is a special case:
   pay off whatever balance is actually left, rather than trusting the
   formula's payment amount.
+
+## Slice 6 (2026-07-20)
+
+- **A model is a table.** Each field on the `Scenario` class becomes a
+  column; `makemigrations` diffs the models against the last migration and
+  writes the SQL to get there, `migrate` actually runs it. Nothing touches
+  the database until `migrate` runs — `makemigrations` alone just writes a
+  Python file describing the change.
+- **`ModelSerializer` vs. plain `Serializer`.** The payment/affordability
+  serializers declare every field's rules by hand because there's no model
+  behind them. `ScenarioSerializer` instead points at the `Scenario` model
+  and inherits its field types and constraints — one source of truth
+  instead of two copies that can drift apart.
+- **Generic views vs. `@api_view`.** Every other endpoint is a plain
+  function with `@api_view` because each one does one bespoke calculation.
+  `ScenarioListCreate(generics.ListCreateAPIView)` is pure list-and-create
+  over a model with no custom logic, which is exactly what that generic
+  class does — so there's no view body to write at all.
+- **Why results aren't saved.** Only the scenario's *inputs* go in the
+  database. Loading a scenario re-runs `finance.affordability()` on those
+  inputs rather than reading stored numbers, so results can never drift
+  out of sync with the formula that produces them.

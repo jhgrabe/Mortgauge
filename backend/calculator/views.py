@@ -1,9 +1,10 @@
-from rest_framework import status
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from . import finance
-from .serializers import AffordabilityInputSerializer, PaymentInputSerializer
+from .models import Scenario
+from .serializers import AffordabilityInputSerializer, PaymentInputSerializer, ScenarioSerializer
 
 
 @api_view(['GET'])
@@ -56,3 +57,12 @@ def affordability(request):
         **{k: str(v) for k, v in result.items()},
         'schedule': schedule,
     })
+
+
+class ScenarioListCreate(generics.ListCreateAPIView):
+    """GET lists saved scenarios (newest first, per the model's default
+    ordering); POST saves a new one. DRF's generic view wires both up
+    from the queryset + serializer alone — no view logic to write.
+    """
+    queryset = Scenario.objects.all()
+    serializer_class = ScenarioSerializer
